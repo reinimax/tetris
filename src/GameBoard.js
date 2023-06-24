@@ -32,45 +32,66 @@ class GameBoard {
     }
 
     placeTetrisPiece() {
-        // TODO: Add collision detection! If placing the piece with its center of gravitiy
-        // would result in part of it being outside the grid, tell the calling code that
-        // the piece could not be placed.
+        this.overlapTetrisPieceWithBoardCallback(this.doPlacePiece.bind(this));
+    }
+
+    /**
+     * Loop over every cell in the matrix of a tetris piece and apply a callback.
+     * 
+     * Arguments passed to the callback:
+     * - row: The row on the gameboard corresponding to the row in the matrix of the piece.
+     * - col: The column on the gameboard corresponding to the column in the matrix of the piece.
+     * - matrixRow: The current row in the matrix of the tetris piece.
+     * - matrixCol: The current column in the matrix of the tetris piece.
+     * 
+     */
+    overlapTetrisPieceWithBoardCallback(cb) {
+        if (!(cb instanceof Function)) {
+            return;
+        }
+
         for (let row = this.activeRow; row < this.activePiece.matrix.length + this.activeRow; row++) {
             let local_col = this.activeCol;
             for (let part = 0; part < this.activePiece.matrix[row - this.activeRow].length; part++) {
                 if (this.cells[row]) {
+                    let rowInTetrisPieceMatrix = row - this.activeRow;
                     // Tetris pieces are 3 or 4 in width. The center of gravity is 
                     // always 1 to the right of the leftmost part of the piece.
-                    this.cells[row][local_col - 1] = this.activePiece.matrix[row - this.activeRow][part];
+                    cb(row, local_col - 1, rowInTetrisPieceMatrix, part);
                 }
                 local_col++;
             }
         }
     }
 
+    doPlacePiece(row, col, matrixRow, maxtrixCol) {
+        // TODO: Add collision detection! If placing the piece with its center of gravitiy
+        // would result in part of it being outside the grid, tell the calling code that
+        // the piece could not be placed.
+        this.cells[row][col] = this.activePiece.matrix[matrixRow][maxtrixCol];
+    }
+
     update() {
         if (this.activePiece === null || this.activeCol === null) {
             return;
         }
-        // Erase the previous position on the gameboard.
-        for (let row = this.activeRow; row < this.activePiece.matrix.length + this.activeRow; row++) {
-            let local_col = this.activeCol;
-            for (let part = 0; part < this.activePiece.matrix[row - this.activeRow].length; part++) {
-                if (this.cells[row]) {
-                    // Check if there is a 1 on this place on the gameboard and if there 
-                    // is also a 1 in the matrix of the piece. This makes sure we clear 
-                    // only the parts of the gameboard where the piece was drawn and not 
-                    // any neighboring areas.
-                    if (this.cells[row][local_col - 1] && this.activePiece.matrix[row - this.activeRow][part]) {
-                        this.cells[row][local_col - 1] = 0;
-                    }
-                }
-                local_col++;
-            } 
-        }
-        // Increment the row and place the piece on the new row.
+        this.eraseTetrisPiece();
         this.activeRow++;
         this.placeTetrisPiece();
+    }
+
+    eraseTetrisPiece() {
+        this.overlapTetrisPieceWithBoardCallback(this.doEraseTetrisPiece.bind(this));
+    }
+
+    doEraseTetrisPiece(row, col, matrixRow, maxtrixCol) {
+        // Check if there is a 1 on this place on the gameboard and if there 
+        // is also a 1 in the matrix of the piece. This makes sure we clear 
+        // only the parts of the gameboard where the piece was drawn and not 
+        // any neighboring areas.
+        if (this.cells[row][col] && this.activePiece.matrix[matrixRow][maxtrixCol]) {
+            this.cells[row][col] = 0;
+        }
     }
 
     render(ctx) {
