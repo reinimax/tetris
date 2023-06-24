@@ -6,13 +6,23 @@ class Game {
         this.ctx = canvas.getContext('2d');
         this.renderables = [];
         this.updateables = [];
+        this.then = null;
+        this.fpsInterval = null;
     }
 
-    start() {
+    start(fps) {
+        this.fpsInterval = 1000 / fps;
+        this.then = Date.now();
         this.gameLoop();
     }
 
     gameLoop() {
+        requestAnimationFrame(this.gameLoop.bind(this));
+      
+        if (!this.shouldUpdate()) {
+            return;
+        }
+
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         for (const updateable of this.updateables) {
@@ -23,7 +33,18 @@ class Game {
             renderable.render(this.ctx);
         }
 
-        requestAnimationFrame(this.gameLoop.bind(this));
+    }
+
+    shouldUpdate() {
+        let now = Date.now();
+        let elapsed = now - this.then;
+      
+        if (elapsed <= this.fpsInterval) {
+            return false;
+        }
+
+        this.then = now;
+        return true;
     }
 
 }

@@ -13,6 +13,7 @@ const demoPiece = new TetrisPiece([
 ]);
 gameBoard.placeTetrisPiece(demoPiece, 1);
 
+game.updateables.push(gameBoard);
 game.renderables.push(gameBoard);
 
-game.start();
+game.start(5);
