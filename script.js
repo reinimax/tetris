@@ -11,9 +11,9 @@ const demoPiece = new TetrisPiece([
     [1, 1, 1],
     [0, 1, 0],
 ]);
-gameBoard.placeTetrisPiece(demoPiece, 1);
+gameBoard.placeTetrisPieceInitial(demoPiece, 1);
 
 game.updateables.push(gameBoard);
 game.renderables.push(gameBoard);
 
-game.start(5);
+game.start(1);
