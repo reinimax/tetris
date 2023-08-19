@@ -76,7 +76,7 @@ class GameBoard {
             return;
         }
         this.eraseTetrisPiece();
-        this.activeRow++;
+        this.incrementActiveRow();
         this.placeTetrisPiece();
     }
 
@@ -91,6 +91,12 @@ class GameBoard {
         // any neighboring areas.
         if (this.cells[row][col] && this.activePiece.matrix[matrixRow][maxtrixCol]) {
             this.cells[row][col] = 0;
+        }
+    }
+
+    incrementActiveRow() {
+        if (this.activeRow < this.rows - this.activePiece.getHeight()) {
+            this.activeRow++;
         }
     }
 
