@@ -77,6 +77,7 @@ class GameBoard {
         }
         this.eraseTetrisPiece();
         this.incrementActiveRow();
+        this.activePiece.updatePosition();
         this.placeTetrisPiece();
     }
 

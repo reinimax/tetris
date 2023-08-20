@@ -1,6 +1,7 @@
 class TetrisPiece {
-    constructor(pattern) {
+    constructor(pattern, input) {
         this.matrix = pattern;
+        this.input = input;
     }
 
     getHeight() {
@@ -31,6 +32,10 @@ class TetrisPiece {
         });
 
         return offset;
+    }
+
+    updatePosition() {
+        console.log(this.input.keys);
     }
 }
 
