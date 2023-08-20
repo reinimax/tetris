@@ -65,9 +65,6 @@ class GameBoard {
     }
 
     doPlacePiece(row, col, matrixRow, maxtrixCol) {
-        // TODO: Add collision detection! If placing the piece with its center of gravitiy
-        // would result in part of it being outside the grid, tell the calling code that
-        // the piece could not be placed.
         this.cells[row][col] = this.activePiece.matrix[matrixRow][maxtrixCol];
     }
 
@@ -77,7 +74,7 @@ class GameBoard {
         }
         this.eraseTetrisPiece();
         this.incrementActiveRow();
-        this.activeCol = this.activePiece.updatePosition(this.activeCol);
+        this.updateActiveCol();
         this.placeTetrisPiece();
     }
 
@@ -99,6 +96,11 @@ class GameBoard {
         if (this.activeRow < this.rows - this.activePiece.getHeight()) {
             this.activeRow++;
         }
+    }
+
+    updateActiveCol() {
+        this.activeCol = this.activePiece.updatePosition(this.activeCol);
+        // TODO: check if the piece is out of bounds with the gameboard after it has been updated.
     }
 
     render(ctx) {
