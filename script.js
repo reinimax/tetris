@@ -17,5 +17,6 @@ gameBoard.placeTetrisPieceInitial(demoPiece, 1);
 
 game.updateables.push(gameBoard);
 game.renderables.push(gameBoard);
+game.updateables.push(input);
 
 game.start(1);

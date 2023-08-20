@@ -1,16 +1,30 @@
 class Input {
     constructor() {
         this.keys = [];
-        document.addEventListener('keydown', this.addKeyPress);
-        document.addEventListener('keyup', this.removeKeyPress);
+        // We save keyups in this array and use it to remove these keys in the
+        // update-function to make sure even short keypresses get executed once.
+        this.keysToRemove = [];
+        this.keymap = new Map();
+        this.keymap.set('ArrowLeft', 'left');
+        this.keymap.set('ArrowRight', 'right');
+        document.addEventListener('keydown', this.addKeyPress.bind(this));
+        document.addEventListener('keyup', this.removeKeyPress.bind(this));
     }
 
     addKeyPress(event) {
-        console.log(event);
+        if(this.keymap.has(event.key)) {
+            this.keys.push(this.keymap.get(event.key));
+        }
+    }
+
+    update() {
+        this.keys = this.keys.filter(key => !this.keysToRemove.includes(key));
     }
 
     removeKeyPress(event) {
-        console.log(event);
+        if(this.keymap.has(event.key)) {
+            this.keysToRemove.push(this.keymap.get(event.key));
+        }
     }
 }
 

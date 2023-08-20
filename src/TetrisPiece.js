@@ -34,8 +34,14 @@ class TetrisPiece {
         return offset;
     }
 
-    updatePosition() {
-        console.log(this.input.keys);
+    updatePosition(col) {
+        if(this.input.keys.includes('left')) {
+            col = col - 1;
+        }
+        if(this.input.keys.includes('right')) {
+            col = col + 1;
+        }
+        return col;
     }
 }
 
