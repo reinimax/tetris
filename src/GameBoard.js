@@ -101,11 +101,11 @@ class GameBoard {
     updateActiveCol() {
         const colBeforeUpdate = this.activeCol;
         this.activeCol = this.activePiece.updatePosition(this.activeCol);
-        // TODO: check if the piece is out of bounds with the gameboard after it has been updated.
+        // Check if the piece is out of bounds with the gameboard after it has been updated.
+        // If so, reset it.
         if (this.activeCol - this.activePiece.getColsLeftFromCenter() < 0 || 
         this.activeCol + this.activePiece.getColsRightFromCenter() >= this.cols) {
             this.activeCol = colBeforeUpdate;
-            console.log('Out of bounds. Col has been reset.')
         }
     }
 
