@@ -44,16 +44,42 @@ class TetrisPiece {
         return col;
     }
 
+    getOffsetFromLeft() {
+        return this.getColOffset(this.matrix);
+    }
+
+    getOffsetFromRight() {
+        const matrixClone = structuredClone(this.matrix);
+        matrixClone.forEach(row => row.reverse());
+        return this.getColOffset(matrixClone);
+    }
+
+    getColOffset(matrix) {
+        let offset = 0;
+        let colIsEmpty = true;
+        for (let i = 0; i < matrix.length; i++) {
+            matrix.forEach(row => {
+                if (row[i] === 1) colIsEmpty = false;
+            });
+            if (colIsEmpty) {
+                offset++;
+            } else {
+                break;
+            }
+        }
+        return offset;
+    }
+
     getColsLeftFromCenter() {
         // The left offset is always 1 for pieces with a length of 3 or 4.
-        return 1;
+        return 1 - this.getOffsetFromLeft();
     }
 
     getColsRightFromCenter() {
         if (this.matrix.length === 3) {
-            return 1;
+            return 1 - this.getOffsetFromRight();
         } else if (this.matrix.length === 4) {
-            return 2;
+            return 2 - this.getOffsetFromRight();
         } else {
             throw new Error('Invalid matrix length. Tetris pieces can only be 3 or 4 cells wide.');
         }
