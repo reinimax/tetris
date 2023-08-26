@@ -43,6 +43,21 @@ class TetrisPiece {
         }
         return col;
     }
+
+    getColsLeftFromCenter() {
+        // The left offset is always 1 for pieces with a length of 3 or 4.
+        return 1;
+    }
+
+    getColsRightFromCenter() {
+        if (this.matrix.length === 3) {
+            return 1;
+        } else if (this.matrix.length === 4) {
+            return 2;
+        } else {
+            throw new Error('Invalid matrix length. Tetris pieces can only be 3 or 4 cells wide.');
+        }
+    }
 }
 
 export { TetrisPiece };
