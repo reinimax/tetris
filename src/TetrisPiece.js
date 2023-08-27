@@ -34,7 +34,7 @@ class TetrisPiece {
         return offset;
     }
 
-    updatePosition(col) {
+    updateCol(col) {
         if(this.input.keys.includes('left')) {
             col = col - 1;
         }
@@ -42,6 +42,13 @@ class TetrisPiece {
             col = col + 1;
         }
         return col;
+    }
+
+    updateRow(row) {
+        if(this.input.keys.includes('down')) {
+            row++
+        }
+        return row;
     }
 
     getOffsetFromLeft() {

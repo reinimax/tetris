@@ -74,6 +74,7 @@ class GameBoard {
         }
         this.eraseTetrisPiece();
         this.incrementActiveRow();
+        this.updateActiveRow();
         this.updateActiveCol();
         this.placeTetrisPiece();
     }
@@ -93,20 +94,35 @@ class GameBoard {
     }
 
     incrementActiveRow() {
-        if (this.activeRow < this.rows - this.activePiece.getHeight()) {
+        if (!this.activePieceHitFloor()) {
             this.activeRow++;
         }
     }
 
+    activePieceHitFloor() {
+        return this.activeRow >= this.rows - this.activePiece.getHeight();
+    }
+
     updateActiveCol() {
         const colBeforeUpdate = this.activeCol;
-        this.activeCol = this.activePiece.updatePosition(this.activeCol);
+        this.activeCol = this.activePiece.updateCol(this.activeCol);
         // Check if the piece is out of bounds with the gameboard after it has been updated.
         // If so, reset it.
         if (this.activeCol - this.activePiece.getColsLeftFromCenter() < 0 || 
         this.activeCol + this.activePiece.getColsRightFromCenter() >= this.cols) {
             this.activeCol = colBeforeUpdate;
         }
+    }
+
+    updateActiveRow() {
+        const rowBeforeUpdate = this.activeRow;
+        this.activeRow = this.activePiece.updateRow(this.activeRow);
+        // Check if the piece is out of bounds with the gameboard after it has been updated.
+        // If so, reset it.
+        if (this.activePieceHitFloor()) {
+            this.activeRow = rowBeforeUpdate;
+        }
+
     }
 
     render(ctx) {

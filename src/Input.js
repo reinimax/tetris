@@ -7,6 +7,7 @@ class Input {
         this.keymap = new Map();
         this.keymap.set('ArrowLeft', 'left');
         this.keymap.set('ArrowRight', 'right');
+        this.keymap.set('ArrowDown', 'down');
         document.addEventListener('keydown', this.addKeyPress.bind(this));
         document.addEventListener('keyup', this.removeKeyPress.bind(this));
     }
