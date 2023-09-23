@@ -1,7 +1,12 @@
 class TetrisPiece {
     constructor(pattern, input) {
         this.matrix = pattern;
+        this.lastMatrix = this.matrix;
         this.input = input;
+    }
+
+    resetMatrix() {
+        this.matrix = this.lastMatrix;
     }
 
     getHeight() {
@@ -35,6 +40,7 @@ class TetrisPiece {
     }
 
     updateRotation() {
+        this.lastMatrix = this.matrix;
         if(this.input.keys.includes('turnLeft')) {
             this.turnLeft();
         }

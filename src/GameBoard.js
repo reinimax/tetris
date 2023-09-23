@@ -73,10 +73,10 @@ class GameBoard {
             return;
         }
         this.eraseTetrisPiece();
+        this.rotateActivePiece();
         this.incrementActiveRow();
         this.updateActiveRow();
         this.updateActiveCol();
-        this.activePiece.updateRotation();
         this.placeTetrisPiece();
     }
 
@@ -91,6 +91,13 @@ class GameBoard {
         // any neighboring areas.
         if (this.cells[row][col] && this.activePiece.matrix[matrixRow][maxtrixCol]) {
             this.cells[row][col] = 0;
+        }
+    }
+
+    rotateActivePiece() {
+        this.activePiece.updateRotation();
+        if(this.activePieceWouldHitWall(this.activePiece.updateCol(this.activeCol)) || this.activePieceHitFloor()) {
+            this.activePiece.resetMatrix();
         }
     }
 
@@ -109,10 +116,14 @@ class GameBoard {
         this.activeCol = this.activePiece.updateCol(this.activeCol);
         // Check if the piece is out of bounds with the gameboard after it has been updated.
         // If so, reset it.
-        if (this.activeCol - this.activePiece.getColsLeftFromCenter() < 0 || 
-        this.activeCol + this.activePiece.getColsRightFromCenter() >= this.cols) {
+        if (this.activePieceWouldHitWall(this.activeCol)) {
             this.activeCol = colBeforeUpdate;
         }
+    }
+
+    activePieceWouldHitWall(col) {
+        return col - this.activePiece.getColsLeftFromCenter() < 0 || 
+        col + this.activePiece.getColsRightFromCenter() >= this.cols;
     }
 
     updateActiveRow() {
