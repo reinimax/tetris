@@ -91,6 +91,34 @@ class TetrisPiece {
             throw new Error('Invalid matrix length. Tetris pieces can only be 3 or 4 cells wide.');
         }
     }
+
+    /**
+     * Turn the tetris piece right.
+     * 
+     * Turning right means creating a new matrix, where the first 
+     * row of the original matrix becomes the last column of the 
+     * new matrix and so on, like this:
+     * 
+     * [a, b, c]    [g, d, a]
+     * [d, e, f] => [h, e, b]
+     * [g, h, i]    [i, f, c]
+     * 
+     * This means we can take each element in a row and unshift it 
+     * in the corresponding row of a new matrix.
+     */
+    turnRight() {
+        const newMatrix = [];
+        this.matrix.forEach((row, rowIndex) => {
+            row.forEach((cell, colIndex) => {
+                if (!Array.isArray(newMatrix[colIndex])) {
+                    newMatrix[colIndex] = [];
+                }
+                newMatrix[colIndex].unshift(cell);
+            });
+        });
+
+        this.matrix = newMatrix;
+    }
 }
 
 export { TetrisPiece };
