@@ -119,6 +119,35 @@ class TetrisPiece {
 
         this.matrix = newMatrix;
     }
+
+    /**
+     * Turn the tetris piece left.
+     * 
+     * Cf. the comment for turnRight(). This differs in two ways:
+     * First: The first element of the row goes to the LAST column 
+     * of the new matrix. This means we need to reverse each row, 
+     * then we can go in order again.
+     * Second: The first row becomes the FIRST column of the new matrix. 
+     * This means we push the elements instead of unshifting them.
+     * 
+     * [a, b, c]    [c, f, i]
+     * [d, e, f] => [b, e, h]
+     * [g, h, i]    [a, d, g]
+     */
+    turnLeft() {
+        const newMatrix = [];
+        this.matrix.forEach((row, rowIndex) => {
+            const reversedRow = structuredClone(row).reverse();
+            reversedRow.forEach((cell, colIndex) => {
+                if (!Array.isArray(newMatrix[colIndex])) {
+                    newMatrix[colIndex] = [];
+                }
+                newMatrix[colIndex].push(cell);
+            });
+        });
+
+        this.matrix = newMatrix;
+    }
 }
 
 export { TetrisPiece };
