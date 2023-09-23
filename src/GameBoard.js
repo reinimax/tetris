@@ -78,6 +78,13 @@ class GameBoard {
         this.updateActiveRow();
         this.updateActiveCol();
         this.placeTetrisPiece();
+
+        // After everything has processed, check if the piece has hit the 
+        // floor. If so, this piece is no longer active.
+        // TODO: spawn a new one.
+        if (this.activePieceHitFloor()) {
+            this.activePiece = null;
+        }
     }
 
     eraseTetrisPiece() {
