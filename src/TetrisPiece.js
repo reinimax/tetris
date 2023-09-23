@@ -34,6 +34,15 @@ class TetrisPiece {
         return offset;
     }
 
+    updateRotation() {
+        if(this.input.keys.includes('turnLeft')) {
+            this.turnLeft();
+        }
+        if(this.input.keys.includes('turnRight')) {
+            this.turnRight();
+        }
+    }
+
     updateCol(col) {
         if(this.input.keys.includes('left')) {
             col = col - 1;

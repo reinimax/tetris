@@ -8,6 +8,8 @@ class Input {
         this.keymap.set('ArrowLeft', 'left');
         this.keymap.set('ArrowRight', 'right');
         this.keymap.set('ArrowDown', 'down');
+        this.keymap.set('a', 'turnLeft');
+        this.keymap.set('d', 'turnRight');
         document.addEventListener('keydown', this.addKeyPress.bind(this));
         document.addEventListener('keyup', this.removeKeyPress.bind(this));
     }
