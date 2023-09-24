@@ -1,19 +1,17 @@
 import { Game } from "./src/game.js";
 import { GameBoard } from './src/GameBoard.js';
-import { TetrisPiece } from "./src/TetrisPiece.js";
 import { Input } from "./src/Input.js";
+import { TetrisPieceFactory } from "./src/TetrisPieceFactory.js";
 
 const canvas = document.querySelector('#canvas');
 
 const game = new Game(canvas, 200, 400);
-const gameBoard = new GameBoard(canvas);
+// Note that only one instance of Input should ever be created, 
+// because it adds eventListeners to the document.
+// TODO: Don't be lazy and turn this into a Singleton!
 const input = new Input();
-const demoPiece = new TetrisPiece([
-    [0, 0, 0],
-    [1, 1, 1],
-    [0, 1, 0],
-], input);
-gameBoard.placeTetrisPieceInitial(demoPiece, 1);
+const factory = new TetrisPieceFactory(input);
+const gameBoard = new GameBoard(canvas, factory);
 
 game.updateables.push(gameBoard);
 game.renderables.push(gameBoard);

@@ -1,10 +1,11 @@
 class GameBoard {
-    constructor(canvas) {
+    constructor(canvas, factory) {
         this.rows = 20;
         this.cols = 10;
         this.cellWidth = canvas.width / this.cols;
         this.cellHeight = canvas.height / this.rows;
         this.cells = this.initializeCells();
+        this.factory = factory;
         this.activePiece = null;
         this.activeCol = null;
         this.activeRow = 0;
@@ -69,9 +70,20 @@ class GameBoard {
     }
 
     update() {
-        if (this.activePiece === null || this.activeCol === null) {
-            return;
+        if (this.activePiece === null) {
+            // TODO: Make this its own method.
+            const newPiece = this.factory.getNewPiece();
+            let col = Math.floor(Math.random() * this.cols);
+            if (col - newPiece.getColsLeftFromCenter() < 0) {
+                col += newPiece.getColsLeftFromCenter();
+            } 
+            if (col + newPiece.getColsRightFromCenter() >= this.cols) {
+                col -= newPiece.getColsRightFromCenter();
+            }
+
+            this.placeTetrisPieceInitial(newPiece, col);
         }
+
         this.eraseTetrisPiece();
         this.rotateActivePiece();
         this.incrementActiveRow();
@@ -81,7 +93,6 @@ class GameBoard {
 
         // After everything has processed, check if the piece has hit the 
         // floor. If so, this piece is no longer active.
-        // TODO: spawn a new one.
         if (this.activePieceHitFloor()) {
             this.activePiece = null;
         }
