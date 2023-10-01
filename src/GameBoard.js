@@ -9,6 +9,8 @@ class GameBoard {
         this.activePiece = null;
         this.activeCol = null;
         this.activeRow = 0;
+        this.activePieceHitOther = false;
+        this.activePieceIsStuck = false;
     }
 
     initializeCells() {
@@ -96,8 +98,9 @@ class GameBoard {
 
         // After everything has processed, check if the piece has hit the 
         // floor. If so, this piece is no longer active.
-        if (this.activePieceHitFloor()) {
+        if (this.activePieceHitFloor() || this.activePieceIsStuck) {
             this.activePiece = null;
+            this.activePieceIsStuck = false;
         }
     }
 
@@ -117,14 +120,34 @@ class GameBoard {
 
     rotateActivePiece() {
         this.activePiece.updateRotation();
-        if(this.activePieceWouldHitWall(this.activePiece.updateCol(this.activeCol)) || this.activePieceHitFloor()) {
+        if(this.activePieceWouldHitWall(this.activePiece.updateCol(this.activeCol)) || this.activePieceHitFloor() || this.activePieceHitOtherPiece()) {
             this.activePiece.resetMatrix();
+        }
+    }
+
+    activePieceHitOtherPiece() {
+        this.overlapTetrisPieceWithBoardCallback(this.checkHit.bind(this));
+        if (this.activePieceHitOther) {
+            this.activePieceHitOther = false;
+            return true;
+        }
+        return false;
+    }
+
+    checkHit(row, col, matrixRow, maxtrixCol) {
+        if (this.cells[row][col] && this.activePiece.matrix[matrixRow][maxtrixCol]) {
+            this.activePieceHitOther = true;
         }
     }
 
     incrementActiveRow() {
         if (!this.activePieceHitFloor()) {
             this.activeRow++;
+        }
+
+        if (this.activePieceHitOtherPiece()) {
+            this.activeRow--;
+            this.activePieceIsStuck = true;
         }
     }
 
@@ -137,7 +160,7 @@ class GameBoard {
         this.activeCol = this.activePiece.updateCol(this.activeCol);
         // Check if the piece is out of bounds with the gameboard after it has been updated.
         // If so, reset it.
-        if (this.activePieceWouldHitWall(this.activeCol)) {
+        if (this.activePieceWouldHitWall(this.activeCol) || this.activePieceHitOtherPiece()) {
             this.activeCol = colBeforeUpdate;
         }
     }
@@ -152,7 +175,7 @@ class GameBoard {
         this.activeRow = this.activePiece.updateRow(this.activeRow);
         // Check if the piece is out of bounds with the gameboard after it has been updated.
         // If so, reset it.
-        if (this.activePieceHitFloor()) {
+        if (this.activePieceHitFloor() || this.activePieceHitOtherPiece()) {
             this.activeRow = rowBeforeUpdate;
         }
 
