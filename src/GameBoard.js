@@ -66,7 +66,10 @@ class GameBoard {
     }
 
     doPlacePiece(row, col, matrixRow, maxtrixCol) {
-        this.cells[row][col] = this.activePiece.matrix[matrixRow][maxtrixCol];
+        // We need to update only cells that overlap with non-empty parts of the tetris piece matrix.
+        if (this.activePiece.matrix[matrixRow][maxtrixCol]) {
+            this.cells[row][col] = this.activePiece.matrix[matrixRow][maxtrixCol];
+        }
     }
 
     update() {
