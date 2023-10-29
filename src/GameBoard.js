@@ -156,6 +156,7 @@ class GameBoard {
     }
 
     updateActiveCol() {
+        if (this.activePieceIsStuck) return;
         const colBeforeUpdate = this.activeCol;
         this.activeCol = this.activePiece.updateCol(this.activeCol);
         // Check if the piece is out of bounds with the gameboard after it has been updated.
@@ -171,6 +172,7 @@ class GameBoard {
     }
 
     updateActiveRow() {
+        if (this.activePieceIsStuck) return;
         const rowBeforeUpdate = this.activeRow;
         this.activeRow = this.activePiece.updateRow(this.activeRow);
         // Check if the piece is out of bounds with the gameboard after it has been updated.
