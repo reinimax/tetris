@@ -11,6 +11,15 @@ class GameBoard {
         this.activeRow = 0;
         this.activePieceHitOther = false;
         this.activePieceIsStuck = false;
+        this.colors = [
+            'purple',
+            'blue',
+            'orange',
+            'green',
+            'red',
+            'yellow',
+            'cyan'
+        ];
     }
 
     initializeCells() {
@@ -189,12 +198,11 @@ class GameBoard {
 
     drawCells(ctx) {
         ctx.strokeStyle = '#000';
-        ctx.fillStyle = '#00F';
 
         for (let row = 0; row < this.rows; row++) {
             for (let col = 0; col < this.cols; col++) {
                 if (this.cells[row][col]) {
-                    this.drawCellWithTetrisPiece(ctx, col, row);
+                    this.drawCellWithTetrisPiece(ctx, col, row, this.cells[row][col]);
                 } else {
                     this.drawEmptyCell(ctx, col, row);
                 }
@@ -202,7 +210,8 @@ class GameBoard {
         }
     }
 
-    drawCellWithTetrisPiece(ctx, x, y) {
+    drawCellWithTetrisPiece(ctx, x, y, symbol) {
+        ctx.fillStyle = this.colors[symbol - 1];
         ctx.fillRect(x * this.cellWidth, y * this.cellHeight, this.cellWidth, this.cellHeight);
     }
 
