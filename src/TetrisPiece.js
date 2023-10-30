@@ -1,8 +1,12 @@
 class TetrisPiece {
-    constructor(pattern, input) {
+    constructor(pattern, input, symbol) {
         this.matrix = pattern;
         this.lastMatrix = this.matrix;
         this.input = input;
+        // The symbol indicating the filled parts of the matrix.
+        // This is a number between 1 and 7, which indicates the 
+        // type and color of the piece.
+        this.symbol = symbol;
     }
 
     resetMatrix() {
@@ -12,7 +16,7 @@ class TetrisPiece {
     getHeight() {
         let height = 0;
         this.matrix.forEach(row => {
-            if (row.includes(1)) height++;
+            if (row.includes(this.symbol)) height++;
         });
 
         return height + this.getOffsetFromTop();
@@ -28,7 +32,7 @@ class TetrisPiece {
         let topIsEmpty = true;
         this.matrix.forEach(row => {
             if (topIsEmpty) {
-                if(!row.includes(1)) {
+                if(!row.includes(this.symbol)) {
                     offset++;
                 } else {
                     topIsEmpty = false;
@@ -81,7 +85,7 @@ class TetrisPiece {
         let colIsEmpty = true;
         for (let i = 0; i < matrix.length; i++) {
             matrix.forEach(row => {
-                if (row[i] === 1) colIsEmpty = false;
+                if (row[i] === this.symbol) colIsEmpty = false;
             });
             if (colIsEmpty) {
                 offset++;
