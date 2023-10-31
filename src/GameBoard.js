@@ -99,10 +99,10 @@ class GameBoard {
         }
 
         this.eraseTetrisPiece();
-        this.rotateActivePiece();
         this.incrementActiveRow();
         this.updateActiveRow();
         this.updateActiveCol();
+        this.rotateActivePiece();
         this.placeTetrisPiece();
 
         // After everything has processed, check if the piece has hit the 
@@ -111,6 +111,8 @@ class GameBoard {
             this.activePiece = null;
             this.activePieceIsStuck = false;
         }
+
+        this.removeFullRows();
     }
 
     eraseTetrisPiece() {
@@ -128,6 +130,7 @@ class GameBoard {
     }
 
     rotateActivePiece() {
+        if (this.activePieceIsStuck) return;
         this.activePiece.updateRotation();
         if(this.activePieceWouldHitWall(this.activePiece.updateCol(this.activeCol)) || this.activePieceHitFloor() || this.activePieceHitOtherPiece()) {
             this.activePiece.resetMatrix();
@@ -190,6 +193,10 @@ class GameBoard {
             this.activeRow = rowBeforeUpdate;
         }
 
+    }
+
+    removeFullRows() {
+        // TODO: Implement removing full rows!
     }
 
     render(ctx) {
