@@ -110,9 +110,8 @@ class GameBoard {
         if (this.activePieceHitFloor() || this.activePieceIsStuck) {
             this.activePiece = null;
             this.activePieceIsStuck = false;
+            this.removeFullRows();
         }
-
-        this.removeFullRows();
     }
 
     eraseTetrisPiece() {
@@ -196,7 +195,24 @@ class GameBoard {
     }
 
     removeFullRows() {
-        // TODO: Implement removing full rows!
+        const rowsToBeDeleted = [];
+        this.cells.forEach((row, rowIndex) => {
+            if (this.isFull(row)) {
+                rowsToBeDeleted.push(rowIndex);
+            }
+        });
+        this.deleteRows(rowsToBeDeleted);
+    }
+
+    isFull(row) {
+        return !row.includes(0);
+    }
+
+    deleteRows(rowsToBeDeleted) {
+        rowsToBeDeleted.forEach(rowIndex => {
+            this.cells.splice(rowIndex, 1);
+            this.cells.unshift(Array(10).fill(0));
+        })
     }
 
     render(ctx) {
