@@ -1,3 +1,5 @@
+import { Score } from "./Score.js";
+
 class GameBoard {
     constructor(canvas, factory) {
         this.rows = 20;
@@ -20,6 +22,7 @@ class GameBoard {
             'yellow',
             'cyan'
         ];
+        this.score = new Score();
     }
 
     initializeCells() {
@@ -110,7 +113,7 @@ class GameBoard {
         if (this.activePieceHitFloor() || this.activePieceIsStuck) {
             this.activePiece = null;
             this.activePieceIsStuck = false;
-            this.removeFullRows();
+            this.handleFullRowsAndUpdateScore();
         }
     }
 
@@ -194,14 +197,24 @@ class GameBoard {
 
     }
 
-    removeFullRows() {
+    handleFullRowsAndUpdateScore() {
+        const rowsToBeDeleted = this.getFullRows();
+        if (rowsToBeDeleted.length >= 1) {
+            this.score.addScore(rowsToBeDeleted.length);
+            this.deleteRows(rowsToBeDeleted);
+        }
+        // Todo: display this somewhere
+        console.log(this.score.getScore());
+    }
+
+    getFullRows() {
         const rowsToBeDeleted = [];
         this.cells.forEach((row, rowIndex) => {
             if (this.isFull(row)) {
                 rowsToBeDeleted.push(rowIndex);
             }
         });
-        this.deleteRows(rowsToBeDeleted);
+        return rowsToBeDeleted;
     }
 
     isFull(row) {
