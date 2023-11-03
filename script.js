@@ -3,6 +3,7 @@ import { GameBoard } from './src/GameBoard.js';
 import { Input } from "./src/Input.js";
 import { TetrisPieceFactory } from "./src/TetrisPieceFactory.js";
 import { RunningState } from "./src/RunningState.js";
+import { PausedState } from "./src/PausedState.js";
 
 const canvas = document.querySelector('#canvas');
 
@@ -18,7 +19,10 @@ const runningState = new RunningState();
 runningState.updateables.push(gameBoard);
 runningState.renderables.push(gameBoard);
 
+const pausedState = new PausedState();
+
 game.addState('running', runningState);
+game.addState('paused', pausedState);
 game.transitionStateTo('running');
 
 game.start(3);

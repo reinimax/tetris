@@ -10,6 +10,7 @@ class Input {
         this.keymap.set('ArrowDown', 'down');
         this.keymap.set('a', 'turnLeft');
         this.keymap.set('d', 'turnRight');
+        this.keymap.set('Escape', 'pause');
         document.addEventListener('keydown', this.addKeyPress.bind(this));
         document.addEventListener('keyup', this.removeKeyPress.bind(this));
     }

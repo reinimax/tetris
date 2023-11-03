@@ -1,4 +1,4 @@
-class RunningState {
+class PausedState {
     constructor() {
         this.renderables = [];
         this.updateables = [];
@@ -6,17 +6,17 @@ class RunningState {
 
     /** Executed when state is entered. */
     enter(game) {
-        console.log('RunningState entered.');
+        console.log('PausedState entered.');
     }
 
     /** Executed when state is exited. */
     exit(game) {
-        console.log('RunningState exited.');
+        console.log('PausedState exited.');
     }
 
     execute(game) {
         if (game.input.keys.includes('pause')) {
-            game.transitionStateTo('paused');
+            game.transitionStateTo('running');
         }
 
         for (const updateable of this.updateables) {
@@ -29,4 +29,4 @@ class RunningState {
     }
 }
 
-export { RunningState }
+export { PausedState }
