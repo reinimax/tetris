@@ -1,6 +1,6 @@
 class Game {
 
-    constructor(canvas, width, height) {
+    constructor(canvas, width, height, input) {
         canvas.width = width;
         canvas.height = height;
         this.ctx = canvas.getContext('2d');
@@ -8,6 +8,7 @@ class Game {
         this.fpsInterval = null;
         this.states = {};
         this.currentState = null;
+        this.input = input;
     }
 
     addState(key, state) {
@@ -42,7 +43,12 @@ class Game {
         } else {
             throw new Error('No game state is set.');
         }
-        
+
+        // This is called after all other updates, because it actually
+        // removes keys that were released. Calling it last makes sure 
+        // every keystroke gets recognized and handled. 
+        // Maybe a better alternative could be a queue / event system.
+        this.input.update();
     }
 
     shouldUpdate() {
