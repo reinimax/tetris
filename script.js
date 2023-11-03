@@ -4,6 +4,7 @@ import { Input } from "./src/Input.js";
 import { TetrisPieceFactory } from "./src/TetrisPieceFactory.js";
 import { RunningState } from "./src/RunningState.js";
 import { PausedState } from "./src/PausedState.js";
+import { PauseOverlay } from "./src/PauseOverlay.js";
 
 const canvas = document.querySelector('#canvas');
 
@@ -20,6 +21,8 @@ runningState.updateables.push(gameBoard);
 runningState.renderables.push(gameBoard);
 
 const pausedState = new PausedState();
+pausedState.renderables.push(gameBoard);
+pausedState.renderables.push(new PauseOverlay());
 
 game.addState('running', runningState);
 game.addState('paused', pausedState);
