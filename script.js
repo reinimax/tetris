@@ -2,6 +2,7 @@ import { Game } from "./src/game.js";
 import { GameBoard } from './src/GameBoard.js';
 import { Input } from "./src/Input.js";
 import { TetrisPieceFactory } from "./src/TetrisPieceFactory.js";
+import { RunningState } from "./src/RunningState.js";
 
 const canvas = document.querySelector('#canvas');
 
@@ -13,8 +14,13 @@ const input = new Input();
 const factory = new TetrisPieceFactory(input);
 const gameBoard = new GameBoard(canvas, factory);
 
-game.updateables.push(gameBoard);
-game.renderables.push(gameBoard);
-game.updateables.push(input);
+const runningState = new RunningState();
+runningState.updateables.push(gameBoard);
+runningState.renderables.push(gameBoard);
+// Todo: Input should be made directly accessible/hooked up to the game.
+runningState.updateables.push(input);
 
-game.start(1);
+game.addState('running', runningState);
+game.transitionStateTo('running');
+
+game.start(3);
