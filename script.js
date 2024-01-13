@@ -28,4 +28,4 @@ game.addState('running', runningState);
 game.addState('paused', pausedState);
 game.transitionStateTo('running');
 
-game.start(3);
+game.start(60);

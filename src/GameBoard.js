@@ -23,6 +23,7 @@ class GameBoard {
             'cyan'
         ];
         this.score = new Score();
+        this.debounce = 0;
     }
 
     initializeCells() {
@@ -87,6 +88,12 @@ class GameBoard {
     }
 
     update() {
+        // TODO: make this better, so that speed could vary on different levels.
+        this.debounce++;
+        if (this.debounce % 10 !== 0) {
+            return;
+        }
+
         if (this.activePiece === null) {
             // TODO: Make this its own method.
             const newPiece = this.factory.getNewPiece();
@@ -233,6 +240,7 @@ class GameBoard {
     }
 
     drawCells(ctx) {
+        // TODO: improve the GUI; add animations. E.g. when a row is full, based on some flag play an animation.
         ctx.strokeStyle = '#000';
 
         for (let row = 0; row < this.rows; row++) {
