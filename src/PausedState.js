@@ -12,12 +12,18 @@ class PausedState {
     /** Executed when state is exited. */
     exit(game) {
         console.log('PausedState exited.');
+        // Make sure all input accumulated in paused state is dismissed.
+        game.input.queue = [];
     }
 
     execute(game) {
-        if (game.input.keys.includes('pause')) {
-            game.transitionStateTo('running');
-        }
+        game.input.queue.forEach(obj => {
+            const key = Object.keys(obj)[0];
+            const state = obj[key];
+            if (key === 'pause' && state === 'released') {
+                game.transitionStateTo('running');
+            }
+        });
 
         for (const updateable of this.updateables) {
             updateable.update();

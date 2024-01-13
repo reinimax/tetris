@@ -1,9 +1,8 @@
+// TODO: This should actually provide functionality to easily access keys and manipulate the queue, 
+// so that callers don't have to do so much work and don't have to know about the internals of Input!
 class Input {
     constructor() {
-        this.keys = [];
-        // We save keyups in this array and use it to remove these keys in the
-        // update-function to make sure even short keypresses get executed once.
-        this.keysToRemove = [];
+        this.queue = [];
         this.keymap = new Map();
         this.keymap.set('ArrowLeft', 'left');
         this.keymap.set('ArrowRight', 'right');
@@ -16,18 +15,18 @@ class Input {
     }
 
     addKeyPress(event) {
-        if(this.keymap.has(event.key)) {
-            this.keys.push(this.keymap.get(event.key));
+        if(this.keymap.has(event.key)) { 
+            this.queue.push({[this.keymap.get(event.key)]: 'pressed'});
         }
     }
 
     update() {
-        this.keys = this.keys.filter(key => !this.keysToRemove.includes(key));
+        this.queue = [];
     }
 
     removeKeyPress(event) {
         if(this.keymap.has(event.key)) {
-            this.keysToRemove.push(this.keymap.get(event.key));
+            this.queue.push({[this.keymap.get(event.key)]: 'released'});
         }
     }
 }

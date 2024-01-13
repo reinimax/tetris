@@ -45,28 +45,73 @@ class TetrisPiece {
 
     updateRotation() {
         this.lastMatrix = this.matrix;
-        if(this.input.keys.includes('turnLeft')) {
-            this.turnLeft();
+        // Remove items from the queue and rotate, it the item is the command we are looking for.
+        // Push the stuff we are not interested in back to the queue. Note that this has the implication
+        // that executed commands get "eaten", which is desired (A keypress/command should do ONE action, not multiple ones!).
+        // So, this implementation makes the consumer responsible for removing stuff from the queue, not the game or game state
+        // as was the case before.
+        const tmpQueue = [];
+        while (this.input.queue.length > 0) {
+            const item = this.input.queue.shift();
+            const key = Object.keys(item)[0];
+            const state = item[key];
+            if (key === 'turnLeft' && state === 'pressed') {
+                this.turnLeft();
+            }
+            else if (key === 'turnRight' && state === 'pressed') {
+                this.turnRight();
+            }
+            // If it's not the key we are looking for, add it back to the queue
+            else {
+                tmpQueue.push(item);
+            }
         }
-        if(this.input.keys.includes('turnRight')) {
-            this.turnRight();
-        }
+        this.input.queue = tmpQueue;
     }
 
     updateCol(col) {
-        if(this.input.keys.includes('left')) {
-            col = col - 1;
+        // TODO: c.f the above fn. This is of course ugly code duplication and should be refactored!
+        const tmpQueue = [];
+        while (this.input.queue.length > 0) {
+            const item = this.input.queue.shift();
+            const key = Object.keys(item)[0];
+            const state = item[key];
+            if (key === 'left' && state === 'pressed') {
+                col = col - 1;
+            }
+            else if (key === 'right' && state === 'pressed') {
+                col = col + 1;
+            }
+            // If it's not the key we are looking for, add it back to the queue
+            else {
+                tmpQueue.push(item);
+            }
         }
-        if(this.input.keys.includes('right')) {
-            col = col + 1;
-        }
+        this.input.queue = tmpQueue;
         return col;
     }
 
     updateRow(row) {
-        if(this.input.keys.includes('down')) {
-            row++
+        // TODO: c.f the above fn. This is of course ugly code duplication and should be refactored!
+        const tmpQueue = [];
+        // Only speed up the downfall of the piece once; ignore additional key presses, lest it falls too quickly!
+        let ignoreAdditionalDownPresses = false;
+        while (this.input.queue.length > 0) {
+            const item = this.input.queue.shift();
+            const key = Object.keys(item)[0];
+            const state = item[key];
+            if (key === 'down' && state === 'pressed') {
+                if (!ignoreAdditionalDownPresses) {
+                    row++
+                    ignoreAdditionalDownPresses = true;
+                }
+            }
+            // If it's not the key we are looking for, add it back to the queue
+            else {
+                tmpQueue.push(item);
+            }
         }
+        this.input.queue = tmpQueue;
         return row;
     }
 

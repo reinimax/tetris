@@ -43,12 +43,6 @@ class Game {
         } else {
             throw new Error('No game state is set.');
         }
-
-        // This is called after all other updates, because it actually
-        // removes keys that were released. Calling it last makes sure 
-        // every keystroke gets recognized and handled. 
-        // Maybe a better alternative could be a queue / event system.
-        this.input.update();
     }
 
     shouldUpdate() {

@@ -15,12 +15,22 @@ class RunningState {
     }
 
     execute(game) {
-        if (game.input.keys.includes('pause')) {
-            game.transitionStateTo('paused');
-        }
-
-        for (const updateable of this.updateables) {
-            updateable.update();
+        let shouldBreak = false;
+        game.input.queue.forEach(obj => {
+            const key = Object.keys(obj)[0];
+            const state = obj[key];
+            if (key === 'pause' && state === 'released') {
+                game.transitionStateTo('paused');
+                game.input.queue = [];
+                shouldBreak = true;
+            }
+        });
+        // This is just a crutch. The problem is, that we have too few frames.
+        // Actually, the game should run with more frames, but update only so often ...
+        if (!shouldBreak) {
+            for (const updateable of this.updateables) {
+                updateable.update();
+            }
         }
 
         for (const renderable of this.renderables) {
