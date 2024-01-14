@@ -210,8 +210,6 @@ class GameBoard {
             this.score.addScore(rowsToBeDeleted.length);
             this.deleteRows(rowsToBeDeleted);
         }
-        // Todo: display this somewhere
-        console.log(this.score.getScore());
     }
 
     getFullRows() {
